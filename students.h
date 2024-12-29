@@ -1,7 +1,7 @@
 #ifndef STUDENTS_H
 #define STUDENTS_H
 
-#include "student_struct.h"
+#include "structs.h"
 #include <stdio.h>
 
 int fcountl(FILE *file);
