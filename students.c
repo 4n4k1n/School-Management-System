@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "student_struct.h"
+#include "structs.h"
 
 int fcountl(FILE *file)
 {
