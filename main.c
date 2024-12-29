@@ -70,7 +70,7 @@ int alloc_grades(Structs *structs, int index)
 int read_files(Structs *structs)
 {
     FILE *file;
-    
+
     file = fopen("students.txt", "r");
     if (!file)
         return (0);
@@ -124,17 +124,6 @@ void print_student(const Student *student)
     printf("COURSES: %d\n\n", student->count_courses);
 }
 
-int load_data(Structs *structs)
-{
-    if (!get_lens(structs))
-        return (0);
-    if (!alloc_structs(structs))
-        return (0);
-    if (!read_files(structs))
-        return (0);
-    return (1);
-}
-
 int main(void)
 {
     Structs structs = {0};
@@ -142,7 +131,10 @@ int main(void)
     if (!load_data(&structs))
         return (1);
     if (structs.lengths[0] > 0)
-        print_student(&structs.students[0]);
+    {
+        for (int i = 0; i < structs.lengths[0]; i++)
+            print_student(&structs.students[0]);
+    }
     free_struct(&structs);
     return (0);
 }
