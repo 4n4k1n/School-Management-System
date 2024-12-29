@@ -2,20 +2,6 @@
 #include <stdio.h>
 #include "structs.h"
 
-int fcountl(FILE *file)
-{
-    int count;
-    char ch;
-
-    count = 0;
-    while ((ch = getc(file)) != EOF)
-    {
-        if (ch == '\n')
-            count++;
-    }
-    return (count);
-}
-
 Student *alloc_students_struct(int size)
 {
     Student *students;
@@ -39,11 +25,14 @@ void load_student_data(FILE *file, Student *students, int size)
     }
 }
 
-void print_student_by_id(Student student)
+void print_student(const Student *student)
 {
-    printf("ID  : %d\n", student.student_id);
-    printf("NAME: %s\n", student.name);
-    printf("AGE : %d\n\n", student.age);
+    if (!student)
+        return;
+    printf("ID: %d\n", student->student_id);
+    printf("NAME: %s\n", student->name);
+    printf("AGE: %d\n", student->age);
+    printf("COURSES: %d\n\n", student->count_courses);
 }
 
 void get_student_data(Student *student, int size)
