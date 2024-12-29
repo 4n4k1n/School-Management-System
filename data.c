@@ -22,6 +22,7 @@ int get_lens(Structs *structs)
 
     files[0] = fopen("students.txt", "r");
     if (!files[0])
+    
         return (0);
     files[1] = fopen("courses.txt", "r");
     if (!files[1])
@@ -130,10 +131,19 @@ void free_struct(Structs *structs)
 int load_data(Structs *structs)
 {
     if (!get_lens(structs))
+    {
+        printf("Cant get the lens\n");
         return (0);
+    }
     if (!alloc_structs(structs))
+    {
+        printf("allocation failed\n");
         return (0);
+    }
     if (!read_files(structs))
+    {
+        printf("read files failed\n");
         return (0);
+    }
     return (1);
 }
