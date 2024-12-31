@@ -1,29 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "structs.h"
-
-Student *alloc_students_struct(int size)
-{
-    Student *students;
-
-    students = (Student *)malloc(sizeof(Student) * size);
-    if (!students)
-        return (NULL);
-    return (students);
-}
-
-void load_student_data(FILE *file, Student *students, int size)
-{
-    int i;
-
-    i = 0;
-    while (i < size)
-    {
-        if (fscanf(file, "%d,%49[^,],%d", &students[i].student_id, students[i].name, &students[i].age) != 3)
-            return;
-        i++;
-    }
-}
+#include <string.h>
 
 void print_student(Student *student)
 {
@@ -33,6 +11,30 @@ void print_student(Student *student)
     printf("NAME    : %s\n", student->name);
     printf("AGE     : %d\n", student->age);
     printf("COURSES : %d\n\n", student->count_courses);
+}
+
+void print_one_student(Structs *structs)
+{
+    char name[50];
+    int found;
+
+    found = 0;
+    printf("Enter student name: ");
+    scanf(" %49[^\n]", name); 
+    for (int i = 0; i < structs->lengths[0]; i++)
+    {
+        if (strcmp(name, structs->students[i].name) == 0 && structs->students[i].student_id >= 0)
+        {
+            found = 1;
+            print_student(&structs->students[i]);
+            break;
+        }
+    }
+    if (!found)
+        printf("Student not found!\n\n");
+    printf("Press any key to continue...\n");
+    getchar();
+    getchar();
 }
 
 void get_student_data(Structs *structs)
@@ -46,20 +48,91 @@ void get_student_data(Structs *structs)
     scanf("%d", &structs->students[structs->lengths[0] - 1].age);
 }
 
-void f_put_student_data(Student *student, int size)
-{
-    FILE *file;
-
-    file = fopen("students.txt", "a");
-    fprintf(file, "%d,%s,%d,%d\n", (student[size - 1]).student_id, (student[size - 1]).name, (student[size - 1]).age, student[size - 1].count_courses);
-    fclose(file);
-}
-
 void add_student(Structs *structs)
 {
+    FILE *file;
+    char file_name[30];
+
     structs->lengths[0]++;
     structs->students = (Student *)realloc(structs->students, sizeof(Student) * structs->lengths[0]);
     if (structs->students == NULL)
         return;
     get_student_data(structs);
+    sprintf(file_name, "grades/%d.txt", (structs->lengths[0] - 1));
+    file = fopen(file_name, "w");
+    fclose(file);
+    printf("Student was added successfully\n");
+    printf("Press any key to continue...\n");
+    getchar();
+    getchar();
+}
+
+void remove_student_file(Structs *structs, int index)
+{
+    char file_name[30];
+    char file_name_old[30];
+
+    sprintf(file_name, "grades/%d.txt", structs->students[index].student_id);
+    if (remove(file_name) == 0)
+        printf("Student removed!\n\n");
+    if (index > 0)
+    {
+        for (int i = index + 1; i < structs->lengths[0]; i++)
+        {
+            
+        }
+    }
+}
+
+void remove_student(Structs *structs)
+{
+    char name[50];
+    int found;
+
+    found = 0;
+    printf("Enter student name: ");
+    scanf(" %49[^\n]", name); 
+    for (int i = 0; i < structs->lengths[0]; i++)
+    {
+        if (strcmp(name, structs->students[i].name) == 0 && structs->students[i].student_id >= 0)
+        {
+            found = 1;
+            remove_student_file(structs, i);
+            structs->students[i].student_id = -1;
+            for (int j = 1;  i + j < structs->lengths[0]; j++)
+            {
+                if (structs->students[i + j].student_id >= 0)
+                    structs->students[i + j].student_id--;
+            }
+            break;
+        }
+    }
+    if (!found)
+        printf("Student not found!\n\n");
+    printf("Press any key to continue...\n");
+    getchar();
+    getchar();
+}
+
+void print_all_students(Structs *structs)
+{
+    int count;
+
+    count = 0;
+    if (structs->lengths[0] > 0)
+    {
+        for (int i = 0; i < structs->lengths[0]; i++)
+        {
+            if (structs->students[i].student_id >= 0)
+            {
+                count++;
+                print_student(&structs->students[i]);
+            }
+        }
+    }
+    else if (count > 0)
+        printf("No students to print!\n");
+    printf("Press any key to continue...\n");
+    getchar();
+    getchar();
 }

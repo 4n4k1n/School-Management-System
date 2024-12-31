@@ -4,11 +4,11 @@
 #include "structs.h"
 #include <stdio.h>
 
-Student *alloc_students_struct(int size);
-void load_student_data(FILE *file, Student *students, int size);
-void print_student(const Student *student);
+void print_student(Student *student);
+void print_one_student(Structs *structs);
 void get_student_data(Student *student, int size);
-void f_put_student_data(Student *student, int size);
 Student *add_student(Structs *structs);
+void remove_student(Structs *structs);
+void print_all_students(Structs *structs);
 
 #endif
