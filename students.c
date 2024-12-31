@@ -25,7 +25,7 @@ void load_student_data(FILE *file, Student *students, int size)
     }
 }
 
-void print_student(const Student *student)
+void print_student(Student *student)
 {
     if (!student)
         return;
@@ -35,15 +35,15 @@ void print_student(const Student *student)
     printf("COURSES : %d\n\n", student->count_courses);
 }
 
-void get_student_data(Student *student, int size)
+void get_student_data(Structs *structs)
 {
-    student[size - 1].student_id = size;
-    student[size - 1].count_courses = 0;
-    student[size - 1].grades = NULL;
+    structs->students[structs->lengths[0] - 1].student_id = structs->lengths[0] - 1;
+    structs->students[structs->lengths[0] - 1].count_courses = 0;
+    structs->students[structs->lengths[0] - 1].grades = NULL;
     printf("Enter student name: ");
-    scanf(" %49[^\n]", student[size - 1].name);
+    scanf(" %49[^\n]", structs->students[structs->lengths[0] - 1].name);
     printf("Enter student age: ");
-    scanf("%d", &student[size - 1].age);
+    scanf("%d", &structs->students[structs->lengths[0] - 1].age);
 }
 
 void f_put_student_data(Student *student, int size)
@@ -51,17 +51,15 @@ void f_put_student_data(Student *student, int size)
     FILE *file;
 
     file = fopen("students.txt", "a");
-    fprintf(file, "%d,%s,%d,%d\n", (student[size - 1]).student_id, (student[size - 1]).name, (student[size - 1]).age, student->count_courses);
+    fprintf(file, "%d,%s,%d,%d\n", (student[size - 1]).student_id, (student[size - 1]).name, (student[size - 1]).age, student[size - 1].count_courses);
     fclose(file);
 }
 
-Student *add_student(Structs *structs)
+void add_student(Structs *structs)
 {
     structs->lengths[0]++;
-    Student *new_students = (Student *)realloc(structs->students, sizeof(Student) * structs->lengths[0]);
-    if (new_students == NULL)
-        return (structs->students);
-    get_student_data(new_students, structs->lengths[0]);
-    f_put_student_data(new_students, structs->lengths[0]);
-    return (new_students);
+    structs->students = (Student *)realloc(structs->students, sizeof(Student) * structs->lengths[0]);
+    if (structs->students == NULL)
+        return;
+    get_student_data(structs);
 }
