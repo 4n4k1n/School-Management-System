@@ -91,8 +91,10 @@ int read_files(Structs *structs)
     for (int i = 0; i < structs->lengths[0]; i++)
     {
         if (fscanf(file, "%d,%49[^,],%d,%d", 
-                   &structs->students[i].student_id, structs->students[i].name,
-                   &structs->students[i].age, &structs->students[i].count_courses) != 4)
+                   &structs->students[i].student_id,
+                   structs->students[i].name,
+                   &structs->students[i].age,
+                   &structs->students[i].count_courses) != 4)
         {
             fclose(file);
             for (int j = 0; j < i; j++)
@@ -104,6 +106,19 @@ int read_files(Structs *structs)
             fclose(file);
             return (0);
         }
+    }
+    fclose(file);
+    file = fopen("courses.txt", "r");
+    if (!file)
+        return (0);
+    for (int i = 0; i < structs->lengths[1]; i++)
+    {
+        if (fscanf(file, "%d,%49[^,],%f,%d", 
+                   &structs->courses[i].course_id,
+                   structs->courses[i].name,
+                   &structs->courses[i].average_grade,
+                   &structs->courses[i].count_students) != 4)
+            return (0);
     }
     fclose(file);
     return (1);
@@ -145,5 +160,42 @@ int load_data(Structs *structs)
         printf("read files failed\n");
         return (0);
     }
+    return (1);
+}
+
+int restore_data(Structs *structs)
+{
+    FILE *file;
+
+    file = fopen("students.txt", "w");
+    if (!file)
+        return (0);
+    for (int i = 0; i < structs->lengths[0]; i++)
+    {
+        if (structs->students[i].student_id >= 0)
+        {
+            fprintf(file, "%d,%s,%d,%d\n",
+            structs->students[i].student_id,
+            structs->students[i].name,
+            structs->students[i].age,
+            structs->students[i].count_courses);
+        }
+    }
+    fclose(file);
+    file = fopen("courses.txt", "w");
+    if (!file)
+        return (0);
+    for (int i = 0; i < structs->lengths[1]; i++)
+    {
+        if (structs->courses[i].course_id >= 0)
+        {
+            fprintf(file, "%d,%s,%f,%d\n",
+            structs->courses[i].course_id,
+            structs->courses[i].name,
+            structs->courses[i].average_grade,
+            structs->courses[i].count_students);
+        }
+    }
+    fclose(file);
     return (1);
 }
