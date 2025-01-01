@@ -69,29 +69,31 @@ void add_student(Structs *structs)
 
 void remove_student_file(Structs *structs, int index)
 {
-    char file_name[30];
-    char file_name_old[30];
+    char filename[30];
+    char new_filename[30];
 
-    sprintf(file_name, "grades/%d.txt", structs->students[index].student_id);
-    if (remove(file_name) == 0)
-        printf("Student removed!\n\n");
-    if (index > 0)
+    snprintf(filename, sizeof(filename), "grades/%d.txt", index);
+    if (remove(filename) != 0)
     {
-        for (int i = index + 1; i < structs->lengths[0]; i++)
-        {
-            
-        }
+        printf("Error deleting file\n");
+        return;
+    }
+    for (int i = index + 1; i < structs->lengths[0]; i++)
+    {
+        snprintf(filename, sizeof(filename), "grades/%d.txt", i);
+        snprintf(new_filename, sizeof(new_filename), "grades/%d.txt", i - 1);
+        if (rename(filename, new_filename) != 0)
+            printf("Error renaming file!\n");
     }
 }
 
 void remove_student(Structs *structs)
 {
     char name[50];
-    int found;
+    int found = 0;
 
-    found = 0;
     printf("Enter student name: ");
-    scanf(" %49[^\n]", name); 
+    scanf(" %49[^\n]", name);
     for (int i = 0; i < structs->lengths[0]; i++)
     {
         if (strcmp(name, structs->students[i].name) == 0 && structs->students[i].student_id >= 0)
@@ -99,20 +101,23 @@ void remove_student(Structs *structs)
             found = 1;
             remove_student_file(structs, i);
             structs->students[i].student_id = -1;
-            for (int j = 1;  i + j < structs->lengths[0]; j++)
+            for (int j = i + 1; j < structs->lengths[0]; j++)
             {
-                if (structs->students[i + j].student_id >= 0)
-                    structs->students[i + j].student_id--;
+                if (structs->students[j].student_id >= 0)
+                    structs->students[j].student_id--;
             }
             break;
         }
     }
     if (!found)
-        printf("Student not found!\n\n");
-    printf("Press any key to continue...\n");
+        printf("Student not found!\n");
+    else
+        printf("Student removed successfully.\n");
+    printf("Press Enter to continue...");
     getchar();
     getchar();
 }
+
 
 void print_all_students(Structs *structs)
 {
