@@ -3,6 +3,7 @@
 
 typedef struct
 {
+    int grade_id;
     int course_id;
     float *grade;
     int count_grades;
@@ -29,17 +30,9 @@ typedef struct
 
 typedef struct
 {
-    char name[50];
-    int count_courses;
-    int *course_ids;
-} School;
-
-typedef struct
-{
     Student *students;
     Course *courses;
-    School *schools;
-    int lengths[3];
+    int lengths[2];
 } Structs;
 
 #endif
