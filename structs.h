@@ -25,6 +25,7 @@ typedef struct
     char name[50];
     float average_grade;
     int count_students;
+    int i;
     int *students_ids;
 } Course;
 
