@@ -14,4 +14,5 @@ void fail_protocol(Structs *structs)
     for (int i = 0; i < structs->lengths[1]; i++)
         free(structs->courses[i].students_ids);
     free(structs->courses);
+    printf("Fail protocol...\nAll structs were freed!\n");
 }
