@@ -7,6 +7,7 @@
 #include "courses.h"
 #include "data.h"
 #include "logic.h"
+#include "fail.h"
 
 int main(void)
 {
@@ -15,7 +16,7 @@ int main(void)
     
     if (!load_data(&structs))
     {
-        printf("Data can not load\n");
+        fail_protocol(&structs);
         return (1);
     }
     input = -1;
