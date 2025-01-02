@@ -50,42 +50,42 @@ void get_student_data(Structs *structs)
 
 void add_student(Structs *structs)
 {
-    FILE *file;
-    char file_name[30];
+    // FILE *file;
+    // char file_name[30];
 
     structs->lengths[0]++;
     structs->students = (Student *)realloc(structs->students, sizeof(Student) * structs->lengths[0]);
     if (structs->students == NULL)
         return;
     get_student_data(structs);
-    sprintf(file_name, "grades/%d.txt", (structs->lengths[0] - 1));
-    file = fopen(file_name, "w");
-    fclose(file);
+    // sprintf(file_name, "grades/%d.txt", (structs->lengths[0] - 1));
+    // file = fopen(file_name, "w");
+    // fclose(file);
     printf("Student was added successfully\n");
     printf("Press any key to continue...\n");
     getchar();
     getchar();
 }
 
-void remove_student_file(Structs *structs, int index)
-{
-    char filename[30];
-    char new_filename[30];
+// void remove_student_file(Structs *structs, int index)
+// {
+//     char filename[30];
+//     char new_filename[30];
 
-    snprintf(filename, sizeof(filename), "grades/%d.txt", index);
-    if (remove(filename) != 0)
-    {
-        printf("Error deleting file\n");
-        return;
-    }
-    for (int i = index + 1; i < structs->lengths[0]; i++)
-    {
-        snprintf(filename, sizeof(filename), "grades/%d.txt", i);
-        snprintf(new_filename, sizeof(new_filename), "grades/%d.txt", i - 1);
-        if (rename(filename, new_filename) != 0)
-            printf("Error renaming file!\n");
-    }
-}
+//     snprintf(filename, sizeof(filename), "grades/%d.txt", index);
+//     if (remove(filename) != 0)
+//     {
+//         printf("Error deleting file\n");
+//         return;
+//     }
+//     for (int i = index + 1; i < structs->lengths[0]; i++)
+//     {
+//         snprintf(filename, sizeof(filename), "grades/%d.txt", i);
+//         snprintf(new_filename, sizeof(new_filename), "grades/%d.txt", i - 1);
+//         if (rename(filename, new_filename) != 0)
+//             printf("Error renaming file!\n");
+//     }
+// }
 
 void remove_student(Structs *structs)
 {
@@ -99,7 +99,7 @@ void remove_student(Structs *structs)
         if (strcmp(name, structs->students[i].name) == 0 && structs->students[i].student_id >= 0)
         {
             found = 1;
-            remove_student_file(structs, i);
+            // remove_student_file(structs, i);
             structs->students[i].student_id = -1;
             for (int j = i + 1; j < structs->lengths[0]; j++)
             {
