@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror
+LDFLAGS = -lsqlite3
 
 TARGET = school
 
