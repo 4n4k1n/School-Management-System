@@ -1,32 +1,37 @@
-#include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
-
-#include "structs.h"
-#include "students.h"
-#include "courses.h"
-#include "data.h"
-#include "logic.h"
-#include "fail.h"
+#include <stdlib.h>
+#include <sqlite3.h>
+#include "db_setup.h"
+#include "db_students.h"
 
 int main(void)
 {
-    Structs structs = {0};
+    sqlite3 *db;
+    char *errMsg = NULL;
+    int rc;
     int input;
-    
-    if (!load_data(&structs))
+
+    rc = sqlite3_open("database.db", &db);
+    if (rc != SQLITE_OK)
     {
-        fail_protocol(&structs);
+        fprintf(stderr, "Cant open databse: %s!\n", sqlite3_errmsg(db));
         return (1);
     }
-    input = -1;
-    while (input != 0)
+    fprintf(stdout, "Database opend succesfully!\n");
+    setup_db(db, errMsg);
+    while (1)
     {
-        print_menu();
-        printf("\nEnter acitivity: ");
+        printf("Enter activity: ");
         scanf("%d", &input);
-        do_input(input, &structs);
+        if (input == 0)
+            break;
+        else if (input == 1)
+            db_add_student(db);
+        else if (input == 2)
+            db_print_all_students(db);
+        else if (input == 3)
+            print_single_student(db);
     }
-    free_struct(&structs);
+    sqlite3_close(db);
     return (0);
 }
